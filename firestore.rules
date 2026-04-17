@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Writes only happen via our server-side API route using admin credentials.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

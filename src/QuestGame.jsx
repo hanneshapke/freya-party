@@ -27,13 +27,13 @@ import { initializeApp, getApps } from "firebase/app";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // ---------- FIREBASE ----------
-// Values come from Vercel environment variables prefixed with VITE_ or NEXT_PUBLIC_.
-// See README for setup.
+// Values come from VITE_FIREBASE_* environment variables (see .env).
 const firebaseConfig = {
   apiKey: import.meta.env?.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env?.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: import.meta.env?.VITE_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env?.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env?.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env?.VITE_FIREBASE_APP_ID,
 };
 

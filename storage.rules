@@ -1,0 +1,11 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /submissions/{questId}/{explorer}/{filename} {
+      // Anyone can upload a photo up to 10 MB. Read is restricted to you.
+      allow read: if false;
+      allow write: if request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+  }
+}
