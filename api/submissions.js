@@ -27,6 +27,10 @@ if (!getApps().length) {
 const db = getFirestore();
 
 export default async function handler(req, res) {
+  if (process.env.SUBMISSIONS_PAUSED === "1") {
+    return res.status(503).json({ error: "Submissions closed" });
+  }
+
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed" });
