@@ -7,6 +7,7 @@ from sqlalchemy import text
 
 from app.config import get_settings
 from app.db import engine
+from app.routes import clerk_webhook, me
 
 settings = get_settings()
 
@@ -24,6 +25,9 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "X-Guest-Token"],
 )
+
+app.include_router(me.router)
+app.include_router(clerk_webhook.router)
 
 
 @app.on_event("shutdown")
