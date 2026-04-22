@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ArrowLeft, Camera, Check, Upload, X } from "lucide-react";
 
 import { guestApi, uploadToPresigned } from "../../lib/api.js";
@@ -7,6 +8,7 @@ import { clearGuestSession, loadGuestSession, saveGuestSession } from "../../lib
 import { iconFor } from "../../lib/icons.js";
 
 function JoinScreen({ joinCode, onJoined }) {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -30,10 +32,10 @@ function JoinScreen({ joinCode, onJoined }) {
 
   return (
     <form onSubmit={submit} className="max-w-md mx-auto p-8 space-y-4">
-      <h1 className="text-3xl font-serif">Willkommen zur Foto-Jagd</h1>
-      <p className="text-sm text-[#8b6542]">Party-Code: {joinCode}</p>
+      <h1 className="text-3xl font-serif">{t("guest.welcome_title")}</h1>
+      <p className="text-sm text-[#8b6542]">{t("guest.party_code", { code: joinCode })}</p>
       <label className="block">
-        <span className="text-sm">Dein Name</span>
+        <span className="text-sm">{t("guest.your_name")}</span>
         <input
           className="w-full rounded border border-[#8b6542]/30 bg-white px-3 py-2"
           value={name}
@@ -49,7 +51,7 @@ function JoinScreen({ joinCode, onJoined }) {
           onChange={(e) => setConsent(e.target.checked)}
           className="mt-1"
         />
-        <span>Mein Erziehungsberechtigter erlaubt das Hochladen von Fotos.</span>
+        <span>{t("guest.consent")}</span>
       </label>
       {error && <p className="text-red-600 text-sm">{error}</p>}
       <button
@@ -57,13 +59,14 @@ function JoinScreen({ joinCode, onJoined }) {
         disabled={busy || !consent || !name.trim()}
         className="rounded bg-[#c4543a] px-4 py-2 text-white disabled:opacity-50"
       >
-        {busy ? "Einen Moment..." : "Los geht's"}
+        {busy ? t("guest.joining") : t("guest.start")}
       </button>
     </form>
   );
 }
 
 function QuestBoard({ state, onOpen }) {
+  const { t } = useTranslation();
   const { party, quests, my_submissions } = state;
   const done = new Set(my_submissions.map((s) => s.quest_id));
   return (
@@ -72,7 +75,7 @@ function QuestBoard({ state, onOpen }) {
         <h1 className="text-3xl font-serif">{party.name}</h1>
         {party.welcome_message && <p className="mt-2">{party.welcome_message}</p>}
         {party.frozen_at && (
-          <p className="mt-2 text-red-700 text-sm">Diese Party ist pausiert.</p>
+          <p className="mt-2 text-red-700 text-sm">{t("guest.frozen")}</p>
         )}
       </header>
       <ul className="grid gap-3 sm:grid-cols-2">
@@ -95,10 +98,10 @@ function QuestBoard({ state, onOpen }) {
                 <div className="text-right text-xs">
                   {completed ? (
                     <span className="inline-flex items-center gap-1 text-green-700">
-                      <Check size={14} /> fertig
+                      <Check size={14} /> {t("guest.completed")}
                     </span>
                   ) : (
-                    <span>+{q.xp} XP</span>
+                    <span>{t("guest.xp", { xp: q.xp })}</span>
                   )}
                 </div>
               </button>
@@ -111,6 +114,7 @@ function QuestBoard({ state, onOpen }) {
 }
 
 function QuestDetail({ joinCode, sessionToken, quest, existing, onBack, onSubmitted }) {
+  const { t } = useTranslation();
   const [message, setMessage] = useState(existing?.message ?? "");
   const [files, setFiles] = useState([]);
   const [busy, setBusy] = useState(false);
@@ -158,7 +162,7 @@ function QuestDetail({ joinCode, sessionToken, quest, existing, onBack, onSubmit
   return (
     <div className="p-6 space-y-4 max-w-xl mx-auto">
       <button onClick={onBack} className="flex items-center gap-1 text-sm underline">
-        <ArrowLeft size={16} /> zurück
+        <ArrowLeft size={16} /> {t("common.back")}
       </button>
       <header className="flex items-center gap-3">
         <Icon size={40} className="text-[#c4543a]" />
@@ -168,7 +172,7 @@ function QuestDetail({ joinCode, sessionToken, quest, existing, onBack, onSubmit
 
       {existing && (
         <div className="rounded bg-white/60 p-3">
-          <p className="text-sm text-[#8b6542] mb-2">Bereits hochgeladen:</p>
+          <p className="text-sm text-[#8b6542] mb-2">{t("guest.already_uploaded")}</p>
           <div className="grid grid-cols-3 gap-2">
             {existing.photos.map((p) => (
               <img
@@ -183,7 +187,7 @@ function QuestDetail({ joinCode, sessionToken, quest, existing, onBack, onSubmit
       )}
 
       <label className="block">
-        <span className="text-sm">Nachricht (optional)</span>
+        <span className="text-sm">{t("guest.message_optional")}</span>
         <textarea
           className="w-full rounded border border-[#8b6542]/30 bg-white px-3 py-2"
           value={message}
@@ -206,7 +210,7 @@ function QuestDetail({ joinCode, sessionToken, quest, existing, onBack, onSubmit
         onClick={() => inputRef.current?.click()}
         className="w-full rounded border-2 border-dashed border-[#8b6542] py-6 flex items-center justify-center gap-2 text-[#8b6542]"
       >
-        <Camera /> Fotos auswählen
+        <Camera /> {t("guest.pick_photos")}
       </button>
 
       {files.length > 0 && (
@@ -232,7 +236,8 @@ function QuestDetail({ joinCode, sessionToken, quest, existing, onBack, onSubmit
         disabled={busy || (!existing && files.length === 0)}
         className="w-full rounded bg-[#c4543a] px-4 py-3 text-white disabled:opacity-50 flex items-center justify-center gap-2"
       >
-        <Upload size={18} /> {busy ? "Lädt hoch..." : existing ? "Aktualisieren" : "Abgeben"}
+        <Upload size={18} />{" "}
+        {busy ? t("guest.uploading") : existing ? t("guest.update") : t("guest.submit")}
       </button>
     </div>
   );
