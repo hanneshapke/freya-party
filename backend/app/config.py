@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     stripe_secret_key: str = ""
     stripe_webhook_secret: str = ""
     stripe_price_id: str = ""
+    billing_success_path: str = "/billing/return"
+    billing_cancel_path: str = "/dashboard"
+    billing_grace_seconds: int = 3 * 24 * 3600
 
     r2_account_id: str = ""
     r2_access_key_id: str = ""

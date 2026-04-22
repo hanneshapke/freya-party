@@ -7,7 +7,7 @@ from sqlalchemy import text
 
 from app.config import get_settings
 from app.db import engine
-from app.routes import clerk_webhook, host_submissions, me, parties, public
+from app.routes import billing, clerk_webhook, host_submissions, me, parties, public
 
 settings = get_settings()
 
@@ -30,6 +30,7 @@ app.include_router(me.router)
 app.include_router(parties.router)
 app.include_router(host_submissions.router)
 app.include_router(public.router)
+app.include_router(billing.router)
 app.include_router(clerk_webhook.router)
 
 
