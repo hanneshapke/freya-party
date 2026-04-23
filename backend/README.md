@@ -40,4 +40,4 @@ uv add --group dev pytest-mock  # dev-only dep
 
 ## Deploy
 
-Fly.io: `fly deploy`. Secrets via `fly secrets set KEY=value`. The Dockerfile uses uv under the hood and requires `uv.lock` to be present.
+Cloud Run: `gcloud run deploy freya-party-backend --source .` from this directory. Attach Cloud SQL with `--add-cloudsql-instances=PROJECT:REGION:INSTANCE` and wire secrets via `--set-secrets=KEY=SECRET_NAME:latest` (Secret Manager). The Dockerfile uses uv under the hood and requires `uv.lock` to be present; the container honors `$PORT` and runs `alembic upgrade head` on start. See the root `README.md` for the full command.
