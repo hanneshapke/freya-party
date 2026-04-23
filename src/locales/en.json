@@ -1,0 +1,67 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Try again",
+    "back": "back",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Saved."
+  },
+  "guest": {
+    "welcome_title": "Welcome to the photo hunt",
+    "party_code": "Party code: {{code}}",
+    "your_name": "Your name",
+    "consent": "My parent or guardian allows me to upload photos.",
+    "start": "Let's go",
+    "joining": "One moment...",
+    "frozen": "This party is paused.",
+    "completed": "done",
+    "xp": "+{{xp}} XP",
+    "message_optional": "Message (optional)",
+    "already_uploaded": "Already uploaded:",
+    "pick_photos": "Choose photos",
+    "uploading": "Uploading...",
+    "submit": "Submit",
+    "update": "Update"
+  },
+  "host": {
+    "dashboard": "Dashboard",
+    "subscription": "Subscription",
+    "status_none": "no subscription",
+    "billing_exempt": "Waived",
+    "manage_subscription": "Manage subscription",
+    "subscribe": "Subscribe now",
+    "new_party": "New party",
+    "party_name": "Party name",
+    "create": "Create",
+    "need_subscription": "Active subscription required to create parties.",
+    "your_parties": "Your parties",
+    "no_parties": "No parties yet.",
+    "code": "Code",
+    "paused": "paused",
+    "edit": "Edit",
+    "photos": "Photos",
+    "editor_base": "Basics",
+    "editor_welcome": "Welcome text",
+    "editor_language": "Language",
+    "quests": "Quests",
+    "add_quest": "+ New quest",
+    "quest_title": "Title",
+    "quest_description": "Description",
+    "quest_icon": "Icon",
+    "quest_xp": "XP",
+    "no_submissions": "No submissions yet."
+  },
+  "landing": {
+    "title": "Your own photo hunt",
+    "subtitle": "Create a party, share a code, let your guests upload pictures. All photos land in your private album.",
+    "sign_in": "Sign in"
+  },
+  "billing_return": {
+    "thanks": "Thanks for subscribing!",
+    "status_prefix": "Status:",
+    "status_pending": "updating...",
+    "to_dashboard": "To dashboard"
+  }
+}

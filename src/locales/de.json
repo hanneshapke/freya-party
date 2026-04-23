@@ -1,0 +1,67 @@
+{
+  "common": {
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "retry": "Erneut versuchen",
+    "back": "zurück",
+    "save": "Speichern",
+    "saving": "Speichert...",
+    "saved": "Gespeichert."
+  },
+  "guest": {
+    "welcome_title": "Willkommen zur Foto-Jagd",
+    "party_code": "Party-Code: {{code}}",
+    "your_name": "Dein Name",
+    "consent": "Mein Erziehungsberechtigter erlaubt das Hochladen von Fotos.",
+    "start": "Los geht's",
+    "joining": "Einen Moment...",
+    "frozen": "Diese Party ist pausiert.",
+    "completed": "fertig",
+    "xp": "+{{xp}} XP",
+    "message_optional": "Nachricht (optional)",
+    "already_uploaded": "Bereits hochgeladen:",
+    "pick_photos": "Fotos auswählen",
+    "uploading": "Lädt hoch...",
+    "submit": "Abgeben",
+    "update": "Aktualisieren"
+  },
+  "host": {
+    "dashboard": "Dashboard",
+    "subscription": "Abo",
+    "status_none": "kein Abo",
+    "billing_exempt": "Freigeschaltet",
+    "manage_subscription": "Abo verwalten",
+    "subscribe": "Jetzt abonnieren",
+    "new_party": "Neue Party",
+    "party_name": "Partyname",
+    "create": "Erstellen",
+    "need_subscription": "Aktives Abo nötig, um Parties anzulegen.",
+    "your_parties": "Deine Parties",
+    "no_parties": "Noch keine Party erstellt.",
+    "code": "Code",
+    "paused": "pausiert",
+    "edit": "Bearbeiten",
+    "photos": "Fotos",
+    "editor_base": "Grunddaten",
+    "editor_welcome": "Willkommenstext",
+    "editor_language": "Sprache",
+    "quests": "Quests",
+    "add_quest": "+ Neue Quest",
+    "quest_title": "Titel",
+    "quest_description": "Beschreibung",
+    "quest_icon": "Icon",
+    "quest_xp": "XP",
+    "no_submissions": "Noch keine Einreichungen."
+  },
+  "landing": {
+    "title": "Deine eigene Foto-Jagd",
+    "subtitle": "Erstelle eine Party, teile einen Code, lass die Gäste Bilder hochladen. Alle Fotos landen in deinem privaten Album.",
+    "sign_in": "Anmelden"
+  },
+  "billing_return": {
+    "thanks": "Danke für dein Abo!",
+    "status_prefix": "Status:",
+    "status_pending": "wird aktualisiert...",
+    "to_dashboard": "Zum Dashboard"
+  }
+}
