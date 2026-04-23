@@ -21,12 +21,22 @@ dependencies = [
     "sentry-sdk[fastapi]>=2.18",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest>=8.3",
     "pytest-asyncio>=0.24",
     "ruff>=0.7",
 ]
+# Only needed to run the one-off Firestore -> Postgres + R2 migration at
+# scripts/migrate_freya_to_pg.py. Not shipped in the Docker image.
+migration = [
+    "firebase-admin>=6.5",
+]
+
+[tool.uv]
+# Application layout — we import `app` directly rather than installing
+# the project as a distribution.
+package = false
 
 [tool.ruff]
 line-length = 100

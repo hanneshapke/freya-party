@@ -13,16 +13,17 @@ A multi-tenant photo scavenger hunt: a host signs up, pays a monthly Stripe subs
 
 ### Backend
 
+Uses [uv](https://docs.astral.sh/uv/) — install it with `curl -LsSf https://astral.sh/uv/install.sh | sh` if you haven't already.
+
 ```bash
 cd backend
-python -m venv .venv && source .venv/bin/activate
-pip install -e '.[dev]'
-cp .env.example .env    # fill in Clerk / Stripe / R2 / Postgres secrets
-alembic upgrade head
-uvicorn app.main:app --reload
+uv sync --group dev             # creates .venv and installs everything
+cp .env.example .env            # fill in Clerk / Stripe / R2 / Postgres secrets
+uv run alembic upgrade head
+uv run uvicorn app.main:app --reload
 ```
 
-Health check: `curl http://localhost:8000/healthz`. Tests: `pytest`.
+Health check: `curl http://localhost:8000/healthz`. Tests: `uv run pytest`.
 
 ### Frontend
 
@@ -86,8 +87,9 @@ Stripe webhook URL: `https://<backend-domain>/api/billing/webhook`. Clerk webhoo
 ## Migrating Freya's original party
 
 ```bash
-cd backend && source .venv/bin/activate
-PYTHONPATH=. python ../scripts/migrate_freya_to_pg.py \
+cd backend
+uv sync --group migration       # firebase-admin is only needed for this
+PYTHONPATH=. uv run python ../scripts/migrate_freya_to_pg.py \
   --clerk-user-id user_xxx --email freya@example.com \
   --join-code FREYA2025 --dry-run
 ```
