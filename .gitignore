@@ -18,6 +18,9 @@ build/
 # Party photo exports (local-only, contains real photos)
 downloads/
 
+# Google Photos export state (holds album ID + uploaded-path tracker)
+scripts/.gphotos-state.json
+
 # Environment
 .env
 .env.local
