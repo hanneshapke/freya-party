@@ -1,3 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply bg-parchment-50 text-ink;
+    font-family: "Inter", -apple-system, system-ui, sans-serif;
+  }
+  body {
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(139, 101, 66, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(196, 84, 58, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(139, 101, 66, 0.03) 0%, transparent 60%);
+    background-attachment: fixed;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: "Playfair Display", Georgia, serif;
+  }
+}
+
+@layer components {
+  .paper-noise {
+    @apply pointer-events-none fixed inset-0;
+    opacity: 0.15;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.5'/></svg>");
+    z-index: 0;
+  }
+  .eyebrow {
+    @apply text-xs uppercase font-semibold text-ink-muted;
+    letter-spacing: 0.4em;
+  }
+  .eyebrow-tight {
+    @apply text-xs uppercase font-bold text-ink-muted;
+    letter-spacing: 0.3em;
+  }
+  .btn-stamp {
+    @apply px-8 py-3 bg-ink text-parchment-100 font-bold uppercase text-sm transition-all duration-200 shadow-stamp-orange hover:bg-terracotta hover:shadow-stamp-sm hover:translate-x-[2px] hover:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0;
+    letter-spacing: 0.2em;
+  }
+  .btn-stamp-outline {
+    @apply px-6 py-3 bg-parchment-50 border-2 border-ink text-ink font-bold uppercase text-xs transition-colors hover:bg-terracotta hover:text-parchment-100;
+    letter-spacing: 0.2em;
+  }
+  .card-stamp {
+    @apply bg-parchment-50 border-2 border-ink shadow-stamp;
+  }
+  .card-stamp-lg {
+    @apply bg-parchment-50 border-2 border-ink shadow-stamp-lg;
+  }
+  .input-stamp {
+    @apply w-full px-4 py-3 bg-parchment-50 border-2 border-ink text-ink placeholder:text-ink-muted placeholder:italic focus:outline-none focus:shadow-stamp-orange transition-shadow;
+  }
+}

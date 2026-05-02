@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth, UserButton } from "@clerk/clerk-react";
+import { Camera, Compass, ImageIcon, Plus, Settings } from "lucide-react";
 
 import { hostApi } from "../../lib/api.js";
+import JournalShell from "../../components/JournalShell.jsx";
 
 const ACTIVE_STATUSES = new Set(["active", "trialing"]);
 
@@ -63,47 +65,53 @@ export default function HostDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f5ead3] text-[#3a2e1f]">
-      <header className="flex items-center justify-between p-6 border-b border-[#8b6542]/20">
-        <h1 className="text-2xl font-serif">Dashboard</h1>
-        <UserButton afterSignOutUrl="/" />
+    <JournalShell>
+      <header className="flex items-center justify-between px-6 py-5 border-b-2 border-dashed border-ink-muted/50">
+        <Link to="/" className="flex items-center gap-2">
+          <Compass size={20} className="text-terracotta" strokeWidth={1.5} />
+          <span className="eyebrow-tight">Foto-Jagd</span>
+        </Link>
+        <div className="flex items-center gap-4">
+          <h1 className="text-2xl font-serif italic text-terracotta">Dashboard</h1>
+          <UserButton afterSignOutUrl="/" />
+        </div>
       </header>
 
-      <div className="max-w-3xl mx-auto p-6 space-y-8">
-        <section className="rounded bg-white/60 p-4">
-          <h2 className="text-lg font-serif mb-2">Abo</h2>
+      <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
+        <section className="card-stamp p-6 transform -rotate-[0.4deg]">
+          <p className="eyebrow-tight mb-2">Abo-Status</p>
           {me ? (
-            <div className="flex items-center justify-between">
-              <p>
-                Status: <strong>{me.subscription_status ?? "kein Abo"}</strong>
-                {me.billing_exempt && " · Freigeschaltet"}
-              </p>
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div>
+                <p className="text-2xl font-serif text-ink">
+                  {me.subscription_status ?? "kein Abo"}
+                  {me.billing_exempt && (
+                    <span className="ml-2 text-base italic text-terracotta">
+                      · Freigeschaltet
+                    </span>
+                  )}
+                </p>
+              </div>
               {active ? (
-                <button
-                  onClick={onManage}
-                  className="rounded bg-[#8b6542] px-3 py-2 text-sm text-white"
-                >
+                <button onClick={onManage} className="btn-stamp-outline">
                   Abo verwalten
                 </button>
               ) : (
-                <button
-                  onClick={onSubscribe}
-                  className="rounded bg-[#c4543a] px-3 py-2 text-sm text-white"
-                >
+                <button onClick={onSubscribe} className="btn-stamp">
                   Jetzt abonnieren
                 </button>
               )}
             </div>
           ) : (
-            <p>...</p>
+            <p className="text-ink-muted italic">Lädt...</p>
           )}
         </section>
 
-        <section className="rounded bg-white/60 p-4">
-          <h2 className="text-lg font-serif mb-2">Neue Party</h2>
-          <form className="flex gap-2" onSubmit={onCreate}>
+        <section className="card-stamp-lg p-6 transform rotate-[0.3deg]">
+          <p className="eyebrow-tight mb-3">Neue Party</p>
+          <form className="flex gap-3 flex-col sm:flex-row" onSubmit={onCreate}>
             <input
-              className="flex-1 rounded border border-[#8b6542]/30 bg-white px-3 py-2"
+              className="input-stamp flex-1 font-serif text-lg"
               placeholder="Partyname"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
@@ -112,51 +120,78 @@ export default function HostDashboard() {
             <button
               type="submit"
               disabled={!active || creating || !newName.trim()}
-              className="rounded bg-[#c4543a] px-4 py-2 text-white disabled:opacity-50"
+              className="btn-stamp flex items-center justify-center gap-2 px-6"
             >
-              Erstellen
+              <Plus size={16} />
+              {creating ? "Erstellt..." : "Erstellen"}
             </button>
           </form>
           {!active && (
-            <p className="mt-2 text-sm text-[#8b6542]">
+            <p className="mt-3 text-sm text-ink-muted italic">
               Aktives Abo nötig, um Parties anzulegen.
             </p>
           )}
         </section>
 
         <section>
-          <h2 className="text-lg font-serif mb-2">Deine Parties</h2>
-          {loading && <p>Lädt...</p>}
-          {error && <p className="text-red-600">{error}</p>}
-          {!loading && parties.length === 0 && <p>Noch keine Party erstellt.</p>}
-          <ul className="space-y-2">
-            {parties.map((p) => (
-              <li
-                key={p.id}
-                className="rounded bg-white/60 p-4 flex items-center justify-between"
-              >
-                <div>
-                  <Link to={`/parties/${p.id}/edit`} className="font-serif text-lg">
-                    {p.name}
-                  </Link>
-                  <p className="text-xs text-[#8b6542]">
-                    Code: <strong>{p.join_code}</strong>
-                    {p.frozen_at && " · pausiert"}
-                  </p>
-                </div>
-                <div className="flex gap-4 text-sm">
-                  <Link to={`/parties/${p.id}/edit`} className="underline">
-                    Bearbeiten
-                  </Link>
-                  <Link to={`/parties/${p.id}/submissions`} className="underline">
-                    Fotos
-                  </Link>
-                </div>
-              </li>
-            ))}
+          <p className="eyebrow mb-4">Deine Parties</p>
+          {loading && <p className="text-ink-muted italic">Lädt...</p>}
+          {error && <p className="text-terracotta italic">{error}</p>}
+          {!loading && parties.length === 0 && (
+            <div className="border-2 border-dashed border-ink-muted bg-parchment-100/50 p-8 text-center">
+              <Camera size={36} className="text-ink-muted mx-auto mb-3" strokeWidth={1.5} />
+              <p className="text-ink-soft italic font-serif">
+                Noch keine Party erstellt.
+              </p>
+            </div>
+          )}
+          <ul className="space-y-4">
+            {parties.map((p, idx) => {
+              const rotate = idx % 2 === 0 ? "-rotate-[0.3deg]" : "rotate-[0.3deg]";
+              return (
+                <li
+                  key={p.id}
+                  className={`card-stamp p-5 transform ${rotate} hover:shadow-stamp-orange-lg transition-shadow`}
+                >
+                  <div className="flex items-start justify-between gap-4 flex-wrap">
+                    <div className="flex-1 min-w-0">
+                      <Link
+                        to={`/parties/${p.id}/edit`}
+                        className="text-2xl font-serif text-ink hover:text-terracotta transition-colors"
+                      >
+                        {p.name}
+                      </Link>
+                      <p className="mt-1 text-xs text-ink-muted tracking-widest uppercase font-bold">
+                        Code:{" "}
+                        <span className="text-terracotta">{p.join_code}</span>
+                        {p.frozen_at && (
+                          <span className="ml-2 inline-block bg-terracotta text-parchment-100 px-2 py-0.5 transform -rotate-2 border border-ink">
+                            pausiert
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/parties/${p.id}/edit`}
+                        className="px-3 py-2 border-2 border-ink bg-parchment-100 hover:bg-parchment-200 text-xs uppercase font-bold tracking-widest flex items-center gap-1.5"
+                      >
+                        <Settings size={12} /> Bearbeiten
+                      </Link>
+                      <Link
+                        to={`/parties/${p.id}/submissions`}
+                        className="px-3 py-2 border-2 border-ink bg-ink text-parchment-100 hover:bg-terracotta text-xs uppercase font-bold tracking-widest flex items-center gap-1.5"
+                      >
+                        <ImageIcon size={12} /> Fotos
+                      </Link>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </section>
       </div>
-    </main>
+    </JournalShell>
   );
 }
