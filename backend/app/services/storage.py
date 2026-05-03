@@ -65,27 +65,26 @@ def create_presigned_upload(
     content_type: str,
     expires_in: int = 300,
 ) -> dict[str, Any]:
+    # R2 doesn't support presigned POST (NotImplemented), so we issue a
+    # presigned PUT URL with the Content-Type signed in. Size + type are
+    # re-verified server-side via head_object() before the submission is
+    # committed.
     if not content_type.startswith("image/"):
         raise HTTPException(status_code=422, detail="content_type must start with image/")
     key = build_photo_key(party_id, quest_id, guest_id, content_type)
-    conditions = [
-        {"bucket": settings.r2_bucket},
-        ["content-length-range", 1, settings.max_upload_bytes],
-        ["starts-with", "$Content-Type", "image/"],
-        {"key": key},
-    ]
-    fields = {"Content-Type": content_type}
     try:
-        presigned = _s3_client().generate_presigned_post(
-            Bucket=settings.r2_bucket,
-            Key=key,
-            Fields=fields,
-            Conditions=conditions,
+        url = _s3_client().generate_presigned_url(
+            "put_object",
+            Params={
+                "Bucket": settings.r2_bucket,
+                "Key": key,
+                "ContentType": content_type,
+            },
             ExpiresIn=expires_in,
         )
     except ClientError as exc:
         raise HTTPException(status_code=502, detail="Storage error") from exc
-    return {"url": presigned["url"], "fields": presigned["fields"], "key": key}
+    return {"url": url, "key": key, "headers": {"Content-Type": content_type}}
 
 
 def head_object(key: str) -> dict[str, Any]:

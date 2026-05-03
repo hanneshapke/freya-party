@@ -63,5 +63,5 @@ class UploadUrlRequest(BaseModel):
 
 class UploadUrlResponse(BaseModel):
     url: str
-    fields: dict[str, str]
     key: str
+    headers: dict[str, str] = Field(default_factory=dict)

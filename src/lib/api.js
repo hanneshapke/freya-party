@@ -62,12 +62,16 @@ export function guestApi(joinCode, sessionToken) {
   };
 }
 
-// Upload a File to R2 with the presigned POST returned by uploadUrl().
+// Upload a File to R2 via the presigned PUT URL returned by uploadUrl().
+// Headers signed at issue time (e.g. Content-Type) must match exactly.
 export async function uploadToPresigned(presigned, file) {
-  const form = new FormData();
-  for (const [k, v] of Object.entries(presigned.fields)) form.append(k, v);
-  form.append("file", file);
-  const res = await fetch(presigned.url, { method: "POST", body: form });
+  const headers = { ...(presigned.headers || {}) };
+  if (!headers["Content-Type"]) headers["Content-Type"] = file.type || "application/octet-stream";
+  const res = await fetch(presigned.url, {
+    method: "PUT",
+    headers,
+    body: file,
+  });
   if (!res.ok) throw new Error(`Upload failed: ${res.status}`);
   return presigned.key;
 }
